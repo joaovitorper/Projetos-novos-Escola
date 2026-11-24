@@ -1,79 +1,72 @@
 import 'package:flutter/material.dart';
-
-
+import 'package:flutter/foundation.dart';
+ 
 void main() {
   runApp(const MyApp());
 }
-
-
+ 
+int calcular(int numero) {
+  int resultado = 0;
+ 
+  for (int i = 0; i < numero; i++) {
+    resultado += i;
+  }
+ 
+  return resultado;
+}
+ 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
-
-
+ 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: const TelaPrincipal(),
+      home: const TelaCalculo(),
     );
   }
 }
-
-
-class TelaPrincipal extends StatefulWidget {
-  const TelaPrincipal({super.key});
-
-
+ 
+class TelaCalculo extends StatefulWidget {
+  const TelaCalculo({super.key});
+ 
   @override
-  State<TelaPrincipal> createState() => _TelaPrincipalState();
+  State<TelaCalculo> createState() => _TelaCalculoState();
 }
-
-
-class _TelaPrincipalState extends State<TelaPrincipal> {
-  String mensagem = 'Clique no botão para iniciar';
-
-
-  Future<void> processar() async {
+ 
+class _TelaCalculoState extends State<TelaCalculo> {
+  String resultado = 'Nenhum cálculo realizado';
+ 
+  Future<void> executarCalculo() async {
     setState(() {
-      mensagem = 'Processando...';
+      resultado = 'Calculando...';
     });
-
-
-    await Future.delayed(const Duration(seconds: 3));
-
-
+ 
+    final valor = await compute(calcular, 1000000);
+ 
     setState(() {
-      mensagem = 'Processamento concluído!';
+      resultado = 'Resultado: $valor';
     });
   }
-
-
+ 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Background e Multithreading')),
+      appBar: AppBar(
+        title: const Text('Isolate'),
+      ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(mensagem, style: const TextStyle(fontSize: 20)),
-
-
-            const SizedBox(height: 20),
-
-
-            ElevatedButton(
-              onPressed: processar,
-              child: const Text('Processar'),
-              
+            Text(
+              resultado,
+              style: const TextStyle(fontSize: 18),
             ),
-            const SizedBox(height: 10),
- 
+            const SizedBox(height: 20),
             ElevatedButton(
-            onPressed: () {
-                print('Outro botão pressionado');
-            },
-            child: const Text('Outro botão'),
+              onPressed: executarCalculo,
+              child: const Text('Executar cálculo'),
             ),
           ],
         ),
@@ -81,3 +74,4 @@ class _TelaPrincipalState extends State<TelaPrincipal> {
     );
   }
 }
+ 
